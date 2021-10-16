@@ -5,6 +5,7 @@ import com.kodluyoruz.weekfourapi.model.Product;
 import com.kodluyoruz.weekfourapi.model.request.CreateUpdateProductRequest;
 import com.kodluyoruz.weekfourapi.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,9 +25,13 @@ public class ProductService {
     }
 
     public Product getProduct(int id) {
-        return repository
-                .findById(id)
-                .orElseThrow(() -> new NotFoundException("not found"));
+        try {
+            return repository
+                    .findById(id)
+                    .orElseThrow(() -> new NotFoundException("not found"));
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException(e.getMessage());
+        }
     }
 
     public Product getProductFromMemory(int id) {
@@ -59,13 +64,11 @@ public class ProductService {
         return product;
     }
 
-    public Product deleteProduct(int id) {
-        Product product = getProductFromMemory(id);
-        productList.remove(product);
-        return product;
+    public void deleteProduct(int id) {
+        repository.delete(id);
     }
 
     public List<Product> getProducts() {
-        return productList;
+        return repository.findAll();
     }
 }

@@ -39,7 +39,8 @@ public class ProductController {
     }
 
     @DeleteMapping("{id}")
-    public Product deleteProduct(@PathVariable int id){
-        return service.deleteProduct(id);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProduct(@PathVariable int id){
+        service.deleteProduct(id);
     }
 }
