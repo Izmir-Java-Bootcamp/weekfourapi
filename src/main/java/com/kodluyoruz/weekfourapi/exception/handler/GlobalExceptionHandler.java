@@ -5,14 +5,16 @@ import com.kodluyoruz.weekfourapi.model.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @ControllerAdvice
-//@Slf4j
+@Slf4j
 public class GlobalExceptionHandler {
-    private static final org.slf4j.Logger log =
-            org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException exception) {
         log.error("Exception is occured. Exception:{}", exception.getStackTrace());
@@ -23,5 +25,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
-//    @ExceptionHandler()
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<List<ErrorResponse>> handleValidation(MethodArgumentNotValidException exception) {
+        List<ErrorResponse> response = exception.getBindingResult()
+                .getAllErrors()
+                .stream()
+                .map(item -> ErrorResponse.builder()
+                        .message(item.getObjectName() + ": " + item.getDefaultMessage())
+                        .exceptionType(item.getObjectName())
+                        .build())
+                .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
 }

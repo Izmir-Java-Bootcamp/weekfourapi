@@ -14,10 +14,10 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateUpdateProductRequest {
-    @NotBlank
+    @NotBlank(message = "name boş olamaz")
     private String name;
-    @NotNull
+    @NotNull(message = "description null olamaz")
     private String description;
-    @Min(1)
+    @Min(value = 1,message = "price 1 den küçük olamaz")
     private double price;
 }
