@@ -2,11 +2,14 @@ package com.kodluyoruz.weekfourapi.controller;
 
 
 import com.kodluyoruz.weekfourapi.model.Product;
-import com.kodluyoruz.weekfourapi.model.request.CreateProductRequest;
+import com.kodluyoruz.weekfourapi.model.request.CreateUpdateProductRequest;
 import com.kodluyoruz.weekfourapi.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("products")
@@ -19,9 +22,24 @@ public class ProductController {
         return service.getProduct(id);
     }
 
+    @GetMapping
+    public List<Product> getProducts(){
+        return service.getProducts();
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product createProduct(@RequestBody CreateProductRequest request) {
+    public Product createProduct(@Valid @RequestBody CreateUpdateProductRequest request) {
         return service.createProduct(request);
+    }
+
+    @PutMapping("{id}")
+    public Product updateProduct(@PathVariable int id,@RequestBody CreateUpdateProductRequest request){
+        return service.updateProduct(id,request);
+    }
+
+    @DeleteMapping("{id}")
+    public Product deleteProduct(@PathVariable int id){
+        return service.deleteProduct(id);
     }
 }
