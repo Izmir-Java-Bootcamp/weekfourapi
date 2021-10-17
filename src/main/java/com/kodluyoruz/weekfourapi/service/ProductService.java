@@ -41,18 +41,14 @@ public class ProductService {
                 .orElseThrow(() -> new NotFoundException("not found"));
     }
 
-    public Product createProduct(CreateUpdateProductRequest request) {
-        log.info("Create request: {}", request);
-
+    public void createProduct(CreateUpdateProductRequest request) {
         Product product = Product.builder()
                 .name(request.getName())
                 .price(request.getPrice())
                 .description(request.getDescription())
-                .id(++idCount)
                 .build();
 
-        productList.add(product);
-        return product;
+        repository.save(product);
     }
 
     public Product updateProduct(int id, CreateUpdateProductRequest request) {

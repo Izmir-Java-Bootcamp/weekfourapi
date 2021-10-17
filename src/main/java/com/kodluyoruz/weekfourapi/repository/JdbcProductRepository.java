@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,8 +42,15 @@ public class JdbcProductRepository implements ProductRepository {
 
     @Override
     public int delete(int id) {
-//        String query = "update products set deleted=true where id=?";
-        String query = "delete from products where id=?";
+        String query = "update products set deleted=true where id=?";
+//        String query = "delete from products where id=?";
         return jdbcTemplate.update(query, id);
+    }
+
+    @Override
+    public int save(Product product) {
+        String query = "insert into products (creationDate,deleted,name,description,price) values(?,?,?,?,?)";
+        return jdbcTemplate.update(query,
+                new Date(), false, product.getName(), product.getDescription(), product.getPrice());
     }
 }

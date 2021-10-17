@@ -23,24 +23,24 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> getProducts(){
+    public List<Product> getProducts() {
         return service.getProducts();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product createProduct(@Valid @RequestBody CreateUpdateProductRequest request) {
-        return service.createProduct(request);
+    public void createProduct(@Valid @RequestBody CreateUpdateProductRequest request) {
+        service.createProduct(request);
     }
 
     @PutMapping("{id}")
-    public Product updateProduct(@PathVariable int id,@Valid @RequestBody CreateUpdateProductRequest request){
-        return service.updateProduct(id,request);
+    public Product updateProduct(@PathVariable int id, @Valid @RequestBody CreateUpdateProductRequest request) {
+        return service.updateProduct(id, request);
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProduct(@PathVariable int id){
+    public void deleteProduct(@PathVariable int id) {
         service.deleteProduct(id);
     }
 }
