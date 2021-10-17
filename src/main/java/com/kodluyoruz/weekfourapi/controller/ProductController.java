@@ -34,8 +34,9 @@ public class ProductController {
     }
 
     @PutMapping("{id}")
-    public Product updateProduct(@PathVariable int id, @Valid @RequestBody CreateUpdateProductRequest request) {
-        return service.updateProduct(id, request);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateProduct(@PathVariable int id, @Valid @RequestBody CreateUpdateProductRequest request) {
+        service.updateProduct(id, request);
     }
 
     @DeleteMapping("{id}")

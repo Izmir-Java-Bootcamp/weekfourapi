@@ -13,4 +13,6 @@ public interface ProductRepository {
     int delete(int id);
 
     int save(Product product);
+
+    int update(int id, Product product);
 }

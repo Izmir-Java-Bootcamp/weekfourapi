@@ -53,4 +53,11 @@ public class JdbcProductRepository implements ProductRepository {
         return jdbcTemplate.update(query,
                 new Date(), false, product.getName(), product.getDescription(), product.getPrice());
     }
+
+    @Override
+    public int update(int id, Product product) {
+        String query = "update products set name=?,description=?,price=?,lastModificationDate=? where id=?";
+        return jdbcTemplate.update(query,
+                product.getName(), product.getDescription(), product.getPrice(), new Date(), id);
+    }
 }

@@ -51,13 +51,14 @@ public class ProductService {
         repository.save(product);
     }
 
-    public Product updateProduct(int id, CreateUpdateProductRequest request) {
-        Product product = getProductFromMemory(id);
-        product.setName(request.getName());
-        product.setDescription(request.getDescription());
-        product.setPrice(request.getPrice());
+    public void updateProduct(int id, CreateUpdateProductRequest request) {
+        Product product = Product.builder()
+                .name(request.getName())
+                .price(request.getPrice())
+                .description(request.getDescription())
+                .build();
 
-        return product;
+        repository.update(id, product);
     }
 
     public void deleteProduct(int id) {
